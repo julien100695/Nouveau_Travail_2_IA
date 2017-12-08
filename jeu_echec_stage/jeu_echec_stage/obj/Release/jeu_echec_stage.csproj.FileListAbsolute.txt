@@ -1,0 +1,9 @@
+D:\Desktop\S4_UQAC\STAGE\jeu_echec_stage\jeu_echec_stage\bin\Release\jeu_echec_stage.exe.config
+D:\Desktop\S4_UQAC\STAGE\jeu_echec_stage\jeu_echec_stage\bin\Release\jeu_echec_stage.exe
+D:\Desktop\S4_UQAC\STAGE\jeu_echec_stage\jeu_echec_stage\bin\Release\jeu_echec_stage.pdb
+D:\Desktop\S4_UQAC\STAGE\jeu_echec_stage\jeu_echec_stage\obj\Release\jeu_echec_stage.Form1.resources
+D:\Desktop\S4_UQAC\STAGE\jeu_echec_stage\jeu_echec_stage\obj\Release\jeu_echec_stage.Properties.Resources.resources
+D:\Desktop\S4_UQAC\STAGE\jeu_echec_stage\jeu_echec_stage\obj\Release\jeu_echec_stage.csproj.GenerateResource.Cache
+D:\Desktop\S4_UQAC\STAGE\jeu_echec_stage\jeu_echec_stage\obj\Release\jeu_echec_stage.exe
+D:\Desktop\S4_UQAC\STAGE\jeu_echec_stage\jeu_echec_stage\obj\Release\jeu_echec_stage.pdb
+D:\Desktop\S4_UQAC\STAGE\jeu_echec_stage\jeu_echec_stage\obj\Release\jeu_echec_stage.csprojResolveAssemblyReference.cache
