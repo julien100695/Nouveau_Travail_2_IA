@@ -5,7 +5,7 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Threading;
 using jeu_echec_stage;
-
+using System.Diagnostics;
 
 namespace processAI1
 {
@@ -80,9 +80,9 @@ namespace processAI1
                                 List<String> mesPieces = new List<String>();
                                 List<Pieces> piecesAlli = new List<Pieces>(); // Creation de la liste de nos pièces.
                                 List<Pieces> piecesEnnemies = new List<Pieces>(); // Creation de la liste des pièces ennemies.
-                                var min = new List<Tuple<int, int, CasesAdversesManger>>(); // Liste comportant les tuples(casedépartallié,déplacement_ennemi)
+                                var min = new List<Tuple<int, int, CasesAdversesManger>>(); // Liste comportant les tuples(casedépartallié,casearrivéeallié,déplacement_ennemi)
                                 int poids = new int();
-                                CoupPossible[] coups;
+                                CoupPossible[] coups = new CoupPossible[1000];
 
                                 List<CasesAdversesManger> deplacement_poss = new List<CasesAdversesManger>();
 
@@ -486,7 +486,7 @@ namespace processAI1
             }
 
             int max = -1000;
-            string pos = "";
+            string pos = "debut";
             for (int i = 0; i < tabCoord.Length; i++) //trouve le maximum de toutes les solutions (meme départ)  
             {
                 if (CoupPossibleDictionary[tabCoord[i]].Valeur != 1000 && CoupPossibleDictionary[tabCoord[i]].Valeur > max)
@@ -496,7 +496,9 @@ namespace processAI1
                 }
             }
 
-            //retourne une valeur parmis toute celle jouable (toujours le premier min) 
+            //retourne une valeur parmis toute celle jouable (toujours le premier min)
+            Debug.Print("error" + pos);
+            Debug.Print("error2" + tabCoord.Length);
             CoupPossible arr = CoupPossibleDictionary[pos];
 
 
@@ -538,7 +540,7 @@ namespace processAI1
                 int val = entree.Item3.PoidsAlliee;
                 CoupPossible coup = new CoupPossible(dp, ar,val,"");
                 coups[i] = coup;
-                Console.WriteLine(dp + " " + ar + " " + val);
+                //Console.WriteLine(dp + " " + ar + " " + val);
                 i++;
             }
             return coups;

@@ -48,3 +48,13 @@ C:\Users\Francis\Desktop\Devoirs\IA\Travail2_IA\Travail2_IA\processAI1\processAI
 C:\Users\Francis\Desktop\Devoirs\IA\Travail2_IA\Travail2_IA\processAI1\processAI1\obj\Debug\processAI1.csproj.CoreCompileInputs.cache
 C:\Users\Francis\Desktop\Devoirs\IA\Travail2_IA\Travail2_IA\processAI1\processAI1\obj\Debug\processAI1.exe
 C:\Users\Francis\Desktop\Devoirs\IA\Travail2_IA\Travail2_IA\processAI1\processAI1\obj\Debug\processAI1.pdb
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\processAI1\processAI1\bin\Debug\processAI1.exe.config
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\processAI1\processAI1\bin\Debug\processAI1.exe
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\processAI1\processAI1\bin\Debug\processAI1.pdb
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\processAI1\processAI1\bin\Debug\jeu_echec_stage.exe
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\processAI1\processAI1\bin\Debug\jeu_echec_stage.pdb
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\processAI1\processAI1\bin\Debug\jeu_echec_stage.exe.config
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\processAI1\processAI1\obj\Debug\processAI1.csprojResolveAssemblyReference.cache
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\processAI1\processAI1\obj\Debug\processAI1.csproj.CoreCompileInputs.cache
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\processAI1\processAI1\obj\Debug\processAI1.exe
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\processAI1\processAI1\obj\Debug\processAI1.pdb

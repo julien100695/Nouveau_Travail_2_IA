@@ -40,3 +40,13 @@ C:\Users\Francis\Desktop\Devoirs\IA\Travail2_IA\Travail2_IA\jeu_echec_stage\jeu_
 C:\Users\Francis\Desktop\Devoirs\IA\Travail2_IA\Travail2_IA\jeu_echec_stage\jeu_echec_stage\obj\Debug\jeu_echec_stage.csproj.CoreCompileInputs.cache
 C:\Users\Francis\Desktop\Devoirs\IA\Travail2_IA\Travail2_IA\jeu_echec_stage\jeu_echec_stage\obj\Debug\jeu_echec_stage.exe
 C:\Users\Francis\Desktop\Devoirs\IA\Travail2_IA\Travail2_IA\jeu_echec_stage\jeu_echec_stage\obj\Debug\jeu_echec_stage.pdb
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\jeu_echec_stage\jeu_echec_stage\bin\Debug\jeu_echec_stage.exe.config
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\jeu_echec_stage\jeu_echec_stage\bin\Debug\jeu_echec_stage.exe
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\jeu_echec_stage\jeu_echec_stage\bin\Debug\jeu_echec_stage.pdb
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\jeu_echec_stage\jeu_echec_stage\obj\Debug\jeu_echec_stage.csprojResolveAssemblyReference.cache
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\jeu_echec_stage\jeu_echec_stage\obj\Debug\jeu_echec_stage.Form1.resources
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\jeu_echec_stage\jeu_echec_stage\obj\Debug\jeu_echec_stage.Properties.Resources.resources
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\jeu_echec_stage\jeu_echec_stage\obj\Debug\jeu_echec_stage.csproj.GenerateResource.Cache
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\jeu_echec_stage\jeu_echec_stage\obj\Debug\jeu_echec_stage.csproj.CoreCompileInputs.cache
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\jeu_echec_stage\jeu_echec_stage\obj\Debug\jeu_echec_stage.exe
+C:\Users\Francis\Desktop\Devoirs\IA\Nouveau_Travail_2_IA\jeu_echec_stage\jeu_echec_stage\obj\Debug\jeu_echec_stage.pdb
