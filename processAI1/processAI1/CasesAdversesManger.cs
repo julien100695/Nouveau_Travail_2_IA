@@ -12,28 +12,25 @@ namespace processAI1
 
             private int positionEnnemie;
             private int positionAlliee;
-            private double poidsAlliee;
-            private double poidsEnnemie;
+            private int poidsAlliee;
 
-        public CasesAdversesManger(int positionAlliee, int positionEnnemie)
+        public CasesAdversesManger(int positionAlliee, int positionEnnemie, int poidsAllie)
         {
             this.positionEnnemie = positionEnnemie;
             this.positionAlliee = positionAlliee;
-           // this.poidsAlliee = poidsAlliee;
-            //this.poidsEnnemie = poidsEnnemie;
+            this.poidsAlliee = poidsAlliee;
         }
 
         public int CoordEnnemies1 { get => positionEnnemie; set => positionEnnemie= value; }
         public int CoordAlliee1 { get => positionAlliee; set => positionAlliee = value; }
-        public double PoidsAlliee { get => poidsAlliee; set => poidsAlliee = value; }
-        public double PoidsEnnemie { get => poidsEnnemie; set => poidsEnnemie = value; }
+        public int PoidsAlliee { get => poidsAlliee; set => poidsAlliee = value; }
     }
     public static class TupleListExtensions
     {
-        public static void Add<T1, T2>(this IList<Tuple<T1, T2>> list,
-                T1 item1, T2 item2)
+        public static void Add<T1, T2, T3>(this IList<Tuple<T1, T2, T3>> list,
+                T1 item1, T2 item2, T3 item3)
         {
-            list.Add(Tuple.Create(item1, item2));
+            list.Add(Tuple.Create(item1, item2, item3));
         }
     }
 }

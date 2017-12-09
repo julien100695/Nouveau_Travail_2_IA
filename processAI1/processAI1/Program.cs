@@ -80,7 +80,9 @@ namespace processAI1
                                 List<String> mesPieces = new List<String>();
                                 List<Pieces> piecesAlli = new List<Pieces>(); // Creation de la liste de nos pièces.
                                 List<Pieces> piecesEnnemies = new List<Pieces>(); // Creation de la liste des pièces ennemies.
-                                var min = new List<Tuple<int, CasesAdversesManger>>(); // Liste comportant les tuples(casedépartallié,déplacement_ennemi)
+                                var min = new List<Tuple<int, int, CasesAdversesManger>>(); // Liste comportant les tuples(casedépartallié,déplacement_ennemi)
+                                int poids = new int();
+                                CoupPossible[] coups;
 
                                 List<CasesAdversesManger> deplacement_poss = new List<CasesAdversesManger>();
 
@@ -88,36 +90,65 @@ namespace processAI1
                                 {
                                     if (tabVal[i] > 0) // Si ce sont des alliés
                                     {
-                                        int position = PosForCoord(tabCoord[i]); // On récupère la position.
+                                        int position = PosForCoord(tabCoord[i]); // On récupère la position
                                         // mesPieces.Add(tabCoord[i]); Si on veut les coordonnées de nos pièces, on peut rajouter cette ligne.
-                                        Pieces piece = new Pieces(tabCoord[i], tabVal[i], position);
+                                        if (tabVal[i] == 1) //Pion
+                                            poids = 10;
+                                        else if (tabVal[i] == 21 || tabVal[i] == 22) //tour
+                                            poids = 50;
+                                        else if (tabVal[i] == 4) //fou
+                                            poids = 33;
+                                        else if (tabVal[i] == 31 || tabVal[i] == 32) //cavalier
+                                            poids = 32;
+                                        else if (tabVal[i] == 5) //dame
+                                            poids = 90;
+                                        else if (tabVal[i] == 6) //roi
+                                            poids = 900;
+                                        Pieces piece = new Pieces(tabCoord[i], tabVal[i], position, poids);
                                         piecesAlli.Add(piece); // On ajoute à la liste de pieces alliées.
+                                        //Console.WriteLine(piece.Coordonnees + " " + piece.Poids);
+                                    }
+                                    else if (tabVal[i] <= -1) // Si c'est une piece ennemie.
+                                    {
+                                        int position = PosForCoord(tabCoord[i]); // On récupère la position.
+                                        if (tabVal[i] == -1) //Pion
+                                            poids = -10;
+                                        else if (tabVal[i] == -21 || tabVal[i] == -22) //tour
+                                            poids = -50;
+                                        else if (tabVal[i] == -4) //fou
+                                            poids = -33;
+                                        else if (tabVal[i] == -31 || tabVal[i] == -32) //cavalier
+                                            poids = -32;
+                                        else if (tabVal[i] == -5) //dame
+                                            poids = -90;
+                                        else if (tabVal[i] == -6) //roi
+                                            poids = -900;
+                                        Pieces piece = new Pieces(tabCoord[i], tabVal[i], position, poids);
+                                        piecesEnnemies.Add(piece); // On ajoute à la liste de pieces ennemies.
+                                        //Console.WriteLine(piece.Coordonnees + " " + piece.Poids);
                                     }
                                 }
 
-                                // On récupère la liste de tout ce qu'il reste.
-                                List<String> reste = new List<String>(); // Cases vides.
+                                /* On récupère la liste de tout ce qu'il reste.
+                                //List<String> reste = new List<String>(); // Cases vides.
                                 for (int i = 0; i < tabVal.Length; i++)
                                 {
-                                    if (tabVal[i] <= 0) reste.Add(tabCoord[i]);
-                                    if(tabVal[i]<= -1) // Si c'est une piece ennemie.
-                                    {
-                                        int position = PosForCoord(tabCoord[i]); // On récupère la position.
-                                        Pieces piece = new Pieces(tabCoord[i], tabVal[i], position);
+                                    //if (tabVal[i] <= 0) reste.Add(tabCoord[i]);
+                                        Pieces piece = new Pieces(tabCoord[i], tabVal[i], position, poids);
                                         piecesEnnemies.Add(piece); // On ajoute à la liste de pieces ennemies.
                                     }
-                                }
+                                }*/
 
                                 /* Maintenant on remplit la liste des cases contenant des pièces que l'on peut manger 
                                 et celles où l'on peut aller sans rencontrer d'obstacle. */
 
-                                foreach (Pieces piece in piecesAlli)
+                                /*foreach (Pieces piece in piecesAlli)
                                 {
                                     //Console.WriteLine(piece.Position);
                                 }
                                 foreach (Pieces piece in piecesAlli)
                                 {
-                                    /* Quelque soit la pièce, si le coup est valide sur une piece ennemie, alors on peut la manger          */ 
+                                    //Quelque soit la pièce, si le coup est valide sur une piece ennemie, alors on peut la manger
                                         foreach (Pieces pieceEnnemies in piecesEnnemies)
                                         {
                                         //Console.WriteLine("La position de la pièce est "  + piece.Position + "et ca valeur est" + piece.Valeurs);
@@ -149,17 +180,60 @@ namespace processAI1
                                         }
                                     }
 
-                                }
-
+                                }*/
+                                int tabinddp = new int();
+                                int tabtmparr = new int();
+                                int somme = new int();
                                 foreach(Pieces piece in piecesAlli)
                                 {
                                     for (int i = 0; i < tabCoord.Length; i++)
                                     {
                                         if (echiquier.valide(giveIndexForPosition(piece.Position), giveIndexForPosition(PosForCoord(tabCoord[i]))))
                                         {
-                                            CasesAdversesManger deplacement = new CasesAdversesManger(piece.Position, PosForCoord(tabCoord[i]));
+                                            tabtmparr = tabVal[i]; //on stocke temporairement la valeur de la case d'arrivée
+                                            tabVal[i] = tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)]; //arrivée prend valeur de piece déplacée
+                                            tabVal[tabinddp] = 0; //départ prend valeur nulle
+
+                                            /*foreach (Pieces piece2 in piecesAlli)
+                                                somme += piece2.Poids;
+                                            foreach (Pieces piece2 in piecesEnnemies)
+                                                somme += piece2.Poids;*/
+
+                                            for (int j = 0; j < tabVal.Length; j++)
+                                            {
+                                                if (tabVal[j] == 1) //Pion
+                                                    somme += 10;
+                                                else if (tabVal[j] == 21 || tabVal[j] == 22) //tour
+                                                    somme += 50;
+                                                else if (tabVal[j] == 4) //fou
+                                                    somme += 33;
+                                                else if (tabVal[j] == 31 || tabVal[j] == 32) //cavalier
+                                                    somme += 32;
+                                                else if (tabVal[j] == 5) //dame
+                                                    somme += 90;
+                                                else if (tabVal[j] == 6) //roi
+                                                    somme += 900;
+                                                else if (tabVal[j] == -1) //Pion
+                                                    somme += -10;
+                                                else if (tabVal[j] == -21 || tabVal[j] == -22) //tour
+                                                    somme += -50;
+                                                else if (tabVal[j] == -4) //fou
+                                                    somme += -33;
+                                                else if (tabVal[j] == -31 || tabVal[j] == -32) //cavalier
+                                                    somme += -32;
+                                                else if (tabVal[j] == -5) //dame
+                                                    somme += -90;
+                                                else if (tabVal[j] == -6) //roi
+                                                    somme += +900;
+                                            }
+
+
+
+                                                CasesAdversesManger deplacement = new CasesAdversesManger(piece.Position, PosForCoord(tabCoord[i]), somme);
                                             deplacement_poss.Add(deplacement);
-                                            //Console.WriteLine(piece.Position + " " + PosForCoord(tabCoord[i]));
+                                            somme = 0;
+                                            tabVal[tabinddp] = tabVal[i]; //case de départ reprend sa valeur
+                                            tabVal[i] = tabtmparr; //case d'arrivée reprend sa valeur
                                         }
 
                                     }
@@ -167,9 +241,14 @@ namespace processAI1
 
                                 CasesAdversesManger Deplacement_ennemi;
 
+                                int valeur_ar = new int();
+                                //int valeur_dp = new int();
                                 echiquier.setTrait();
                                 foreach(CasesAdversesManger cas in deplacement_poss)
                                 {
+                                    tabtmparr = tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1))]; // on stocke la valeur de la case d'arrivée
+                                    tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1))] = tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordAlliee1))]; // on considère que notre pièce à fait son mouvement
+                                    tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordAlliee1))] = 0; // la case de départ est donc vide
                                     //Console.WriteLine(cas.CoordAlliee1 + " " + cas.CoordEnnemies1);
                                     foreach (Pieces piece in piecesEnnemies)
                                     {
@@ -179,14 +258,59 @@ namespace processAI1
                                             //Console.WriteLine("départ: "+ piece.Position + " destination: " +PosForCoord(tabCoord[i]) + echiquier.valide(giveIndexForPosition(piece.Position), giveIndexForPosition(PosForCoord(tabCoord[i]))));
                                             if (echiquier.valide(giveIndexForPosition(piece.Position), giveIndexForPosition(PosForCoord(tabCoord[i]))))
                                             {
-                                                Deplacement_ennemi = new CasesAdversesManger(piece.Position, PosForCoord(tabCoord[i]));
-                                                min.Add(cas.CoordAlliee1, Deplacement_ennemi);
-                                               Console.WriteLine("Blanc: " + cas.CoordAlliee1 + " DP Blanc: " + cas.CoordEnnemies1 + " Noir: " + Deplacement_ennemi.CoordAlliee1 + " DP Noir: " +Deplacement_ennemi.CoordEnnemies1);
+                                                valeur_ar = tabVal[i]; //stocke arrivée
+                                                tabVal[i] = tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)]; //arrivée = départ
+                                                tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)] = 0; // départ = vide
+
+                                                for (int j = 0; j < tabVal.Length; j++)
+                                                {
+                                                    if (tabVal[j] == 1) //Pion
+                                                        somme += 10;
+                                                    else if (tabVal[j] == 21 || tabVal[j] == 22) //tour
+                                                        somme += 50;
+                                                    else if (tabVal[j] == 4) //fou
+                                                        somme += 33;
+                                                    else if (tabVal[j] == 31 || tabVal[j] == 32) //cavalier
+                                                        somme += 32;
+                                                    else if (tabVal[j] == 5) //dame
+                                                        somme += 90;
+                                                    else if (tabVal[j] == 6) //roi
+                                                        somme += 900;
+                                                    else if (tabVal[j] == -1) //Pion
+                                                        somme += -10;
+                                                    else if (tabVal[j] == -21 || tabVal[j] == -22) //tour
+                                                        somme += -50;
+                                                    else if (tabVal[j] == -4) //fou
+                                                        somme += -33;
+                                                    else if (tabVal[j] == -31 || tabVal[j] == -32) //cavalier
+                                                        somme += -32;
+                                                    else if (tabVal[j] == -5) //dame
+                                                        somme += -90;
+                                                    else if (tabVal[j] == -6) //roi
+                                                        somme += -900;
+                                                }
+
+                                                Deplacement_ennemi = new CasesAdversesManger(piece.Position, PosForCoord(tabCoord[i]), somme);
+                                                min.Add(cas.CoordAlliee1, cas.CoordEnnemies1, Deplacement_ennemi);
+                                                somme = 0;
+                                                tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)] = tabVal[i]; //départ = départ
+                                                tabVal[i] = valeur_ar; //arrivée = arrivée
+
+                                               //Console.WriteLine("Blanc: " + cas.CoordAlliee1 + " DP Blanc: " + cas.CoordEnnemies1 + " Noir: " + Deplacement_ennemi.CoordAlliee1 + " DP Noir: " +Deplacement_ennemi.CoordEnnemies1 + "Poids coup" + Deplacement_ennemi.PoidsAlliee);
                                             }
                                         }
                                     }
+                                    tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordAlliee1))] = tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1))]; //redonne les valeurs de départ
+                                    tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1))] = tabtmparr; //redonne les valeurs d'arrivée
                                 }
                                 echiquier.setTrait();
+
+                                coups = lien(min);
+
+                               CoupPossible s = CompareMinMax(coups);
+
+
+
 
 
 
@@ -197,15 +321,12 @@ namespace processAI1
 
                                 /////////////////////////////////////////// Notre joueur joue en Random /////////////////////////////////////////////////
                                 //Random rnd = new Random();
-                                //coord[0] = mesPieces[rnd.Next(mesPieces.Count)];
+                                coord[0] = s.Position;
                                 //coord[0] = "b7";
-                                //coord[1] = "b8";
+                                coord[1] = s.Arrive;
                                 //coord[1] = tabCoord[rnd.Next(reste.Count)];
                                 //coord[2] = "P";
-                                foreach (CasesAdversesManger newCase in listeCasesAManger)
-                                {
-                                    Console.WriteLine(newCase.ToString());
-                                }
+
 
                                 /********************************************************************************************************/
                                 /********************************************************************************************************/
@@ -280,8 +401,30 @@ namespace processAI1
 
             
             return tabPos[indice]; // Retourne -100 si erreur et la position sinon. 
+        }
+
+        private static string CoordForPos(int position)
+        {
+            String[] tabCoord = new string[] {  "a8","b8","c8","d8","e8","f8","g8","h8",
+                                       "a7","b7","c7","d7","e7","f7","g7","h7",
+                                       "a6","b6","c6","d6","e6","f6","g6","h6",
+                                       "a5","b5","c5","d5","e5","f5","g5","h5",
+                                       "a4","b4","c4","d4","e4","f4","g4","h4",
+                                       "a3","b3","c3","d3","e3","f3","g3","h3",
+                                       "a2","b2","c2","d2","e2","f2","g2","h2",
+                                       "a1","b1","c1","d1","e1","f1","g1","h1" };
 
 
+            int[] tabPos = new int[] {  21, 22, 23, 24, 25, 26, 27, 28,
+                                  31, 32, 33, 34, 35, 36, 37, 38,
+                                  41, 42, 43, 44, 45, 46, 47, 48,
+                                  51, 52, 53, 54, 55, 56, 57, 58,
+                                  61, 62, 63, 64, 65, 66, 67, 68,
+                                  71, 72, 73, 74, 75, 76, 77, 78,
+                                  81, 82, 83, 84, 85, 86, 87, 88,
+                                  91, 92, 93, 94, 95, 96, 97, 98 };
+             int indice = Array.IndexOf(tabPos, position);
+            return tabCoord[indice];
         }
 
 
@@ -312,11 +455,10 @@ namespace processAI1
             return retour; 
         }
         // int position, int arrivé, int valeur, string pièce 
-        public String CompareMinMax(CoupPossible[] coup)
+        private static CoupPossible CompareMinMax(CoupPossible[] coup)
         {
 
 
-            private static Boolean isPion(Pieces piece)
            // Dictionary<string, int> MinValueDictionary = new Dictionary<string, int>(); 
             Dictionary<string, CoupPossible> CoupPossibleDictionary = new Dictionary<string, CoupPossible>();
 
@@ -355,7 +497,7 @@ namespace processAI1
             }
 
             //retourne une valeur parmis toute celle jouable (toujours le premier min) 
-            string arr = CoupPossibleDictionary[pos].Arrive;
+            CoupPossible arr = CoupPossibleDictionary[pos];
 
 
             /***********recupere toutes les arrivés **************** si on a besoin des coups ennemis 
@@ -385,6 +527,22 @@ namespace processAI1
         }
 
 
+        private static CoupPossible[] lien (List<Tuple<int, int, CasesAdversesManger>>  ennemi)
+        {
+            CoupPossible[] coups = new CoupPossible[ennemi.Count];
+            int i = 0;
+            foreach(Tuple<int, int, CasesAdversesManger> entree in ennemi)
+            {
+                string dp = CoordForPos(entree.Item1);
+                string ar = CoordForPos(entree.Item2);
+                int val = entree.Item3.PoidsAlliee;
+                CoupPossible coup = new CoupPossible(dp, ar,val,"");
+                coups[i] = coup;
+                Console.WriteLine(dp + " " + ar + " " + val);
+                i++;
+            }
+            return coups;
+        }
         private static int giveIndexForPosition(int position)
         {
             int index = -1100;
@@ -406,8 +564,6 @@ namespace processAI1
                     index = i;
                 }
             }
-
-
 
             return index;
         }
