@@ -102,7 +102,7 @@ namespace jeu_echec_stage
                                         TimeSpan dur = DateTime.Now - start;
 
                                         //Elle perd si elle répond en plus de 250ms
-                                        if (dur.TotalMilliseconds > 250)
+                                        if (dur.TotalMilliseconds > 2500)
                                         {
                                             form.setJoueur("BLANCS");
                                             fin = 1;
