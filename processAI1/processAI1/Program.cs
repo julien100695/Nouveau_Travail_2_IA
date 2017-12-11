@@ -6,7 +6,6 @@ using System.IO.MemoryMappedFiles;
 using System.Threading;
 using jeu_echec_stage;
 
-
 namespace processAI1
 {
     class Program
@@ -64,12 +63,35 @@ namespace processAI1
                                 /******************************************************************************************************/
                                 /***************************************** ECRIRE LE CODE DE L'IA *************************************/
                                 /******************************************************************************************************/
-
-
                                 Echiquier echiquier = Echiquier.Instance();
+                                int dep=1000;
+                                int arr=1000;
 
-                                
-                                
+                                echiquier.setTrait();
+                                for(int i = 0; i < tabVal.Length; i++)
+                                {
+                                    if(echiquier.getTabVal(i) != tabVal[i])
+                                    {
+                                        if (echiquier.getTabVal(i) == -10 || tabVal[i] == -10);
+                                        else if (tabVal[i] == 0)
+                                            dep = i;
+                                        
+                                        else
+                                        {
+                                            arr = i;
+                                            if (dep != 1000 && arr != 1000);
+                                                //Console.WriteLine("ennemi bouge de :" + tabCoord[dep] + " à " + tabCoord[arr] + "\n");
+                                        }
+                                    }
+                                    //Console.WriteLine("tab1: " + echiquier.getTabVal(i) + " tab2: " + tabVal[i] + " " + tabCoord[i]);
+                                }
+                                if(dep!=1000 && arr!=1000)
+                                echiquier.deplacement(dep, arr);
+                                echiquier.setTrait();
+                                //Console.WriteLine(tabVal[0] + " " + tabVal[1] + " " + tabVal[2]);
+
+
+
                                 int trait = echiquier.getTrait();
                                 int[] mouvementPion = new int[] { -11, -9 }; // Vecteurs de mouvement du pion.
 
@@ -181,25 +203,20 @@ namespace processAI1
                                     }
 
                                 }*/
-                                int tabinddp = new int();
                                 int tabtmparr = new int();
-                                int somme = new int();
+                                int somme = 0;
                                 foreach(Pieces piece in piecesAlli)
                                 {
-                                    for (int i = 0; i < tabCoord.Length; i++)
+                                    for (int i = tabVal.Length-1; i >= 0; i--)
                                     {
                                         if (echiquier.valide(giveIndexForPosition(piece.Position), giveIndexForPosition(PosForCoord(tabCoord[i]))))
                                         {
+                                            somme = 0;
                                             tabtmparr = tabVal[i]; //on stocke temporairement la valeur de la case d'arrivée
                                             tabVal[i] = tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)]; //arrivée prend valeur de piece déplacée
-                                            tabVal[tabinddp] = 0; //départ prend valeur nulle
+                                            tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)] = 0; //départ prend valeur nulle
 
-                                            /*foreach (Pieces piece2 in piecesAlli)
-                                                somme += piece2.Poids;
-                                            foreach (Pieces piece2 in piecesEnnemies)
-                                                somme += piece2.Poids;*/
-
-                                            for (int j = 0; j < tabVal.Length; j++)
+                                            for (int j = tabVal.Length-1; j>=0; j--)
                                             {
                                                 if (tabVal[j] == 1) //Pion
                                                     somme += 10;
@@ -216,7 +233,7 @@ namespace processAI1
                                                 else if (tabVal[j] == -1) //Pion
                                                     somme += -10;
                                                 else if (tabVal[j] == -21 || tabVal[j] == -22) //tour
-                                                    somme += -50;
+                                                     somme += -50;
                                                 else if (tabVal[j] == -4) //fou
                                                     somme += -33;
                                                 else if (tabVal[j] == -31 || tabVal[j] == -32) //cavalier
@@ -224,20 +241,18 @@ namespace processAI1
                                                 else if (tabVal[j] == -5) //dame
                                                     somme += -90;
                                                 else if (tabVal[j] == -6) //roi
-                                                    somme += +900;
+                                                    somme += -900;
                                             }
-
-
-
-                                                CasesAdversesManger deplacement = new CasesAdversesManger(piece.Position, PosForCoord(tabCoord[i]), somme);
+                                            Console.WriteLine("somme = " + somme + " dp: " + piece.Coordonnees + " arr: " +tabCoord[i]);
+                                            CasesAdversesManger deplacement = new CasesAdversesManger(piece.Position, PosForCoord(tabCoord[i]), somme);
                                             deplacement_poss.Add(deplacement);
-                                            somme = 0;
-                                            tabVal[tabinddp] = tabVal[i]; //case de départ reprend sa valeur
+                                            tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)] = tabVal[i]; //case de départ reprend sa valeur
                                             tabVal[i] = tabtmparr; //case d'arrivée reprend sa valeur
                                         }
 
-                                    }
+                                    }     
                                  }
+                                //Console.WriteLine("\n");
 
                                 CasesAdversesManger Deplacement_ennemi;
 
@@ -249,12 +264,16 @@ namespace processAI1
                                     tabtmparr = tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1))]; // on stocke la valeur de la case d'arrivée
                                     tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1))] = tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordAlliee1))]; // on considère que notre pièce à fait son mouvement
                                     tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordAlliee1))] = 0; // la case de départ est donc vide
-                                    //Console.WriteLine(cas.CoordAlliee1 + " " + cas.CoordEnnemies1);
+
+                                    echiquier.enregistrerCoup(Array.IndexOf(tabCoord, CoordForPos(cas.CoordAlliee1)), Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1)));
+                                    echiquier.deplacement(Array.IndexOf(tabCoord, CoordForPos(cas.CoordAlliee1)), Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1)));
+
                                     foreach (Pieces piece in piecesEnnemies)
                                     {
                                         //Console.WriteLine(piece.Coordonnees);
-                                        for (int i = 0; i < tabCoord.Length; i++)
-                                        { 
+                                        for (int i = tabCoord.Length-1; i >= 0; i--)
+                                        {
+                                            somme = 0;
                                             //Console.WriteLine("départ: "+ piece.Position + " destination: " +PosForCoord(tabCoord[i]) + echiquier.valide(giveIndexForPosition(piece.Position), giveIndexForPosition(PosForCoord(tabCoord[i]))));
                                             if (echiquier.valide(giveIndexForPosition(piece.Position), giveIndexForPosition(PosForCoord(tabCoord[i]))))
                                             {
@@ -262,7 +281,8 @@ namespace processAI1
                                                 tabVal[i] = tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)]; //arrivée = départ
                                                 tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)] = 0; // départ = vide
 
-                                                for (int j = 0; j < tabVal.Length; j++)
+
+                                                for (int j = tabVal.Length - 1; j >= 0; j--)
                                                 {
                                                     if (tabVal[j] == 1) //Pion
                                                         somme += 10;
@@ -292,22 +312,31 @@ namespace processAI1
 
                                                 Deplacement_ennemi = new CasesAdversesManger(piece.Position, PosForCoord(tabCoord[i]), somme);
                                                 min.Add(cas.CoordAlliee1, cas.CoordEnnemies1, Deplacement_ennemi);
-                                                somme = 0;
+                                                if(somme!=0)
+                                                Console.WriteLine("somme = " + somme + " dp1: " + CoordForPos(cas.CoordAlliee1) + " arr1: " + CoordForPos(cas.CoordEnnemies1) + "\n    dp2: " + piece.Coordonnees + " arr2: " + tabCoord[i] + "\n");
+
                                                 tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)] = tabVal[i]; //départ = départ
                                                 tabVal[i] = valeur_ar; //arrivée = arrivée
+                                                
 
-                                               //Console.WriteLine("Blanc: " + cas.CoordAlliee1 + " DP Blanc: " + cas.CoordEnnemies1 + " Noir: " + Deplacement_ennemi.CoordAlliee1 + " DP Noir: " +Deplacement_ennemi.CoordEnnemies1 + "Poids coup" + Deplacement_ennemi.PoidsAlliee);
+                                               //Console.WriteLine ("Poids coup" + Deplacement_ennemi.PoidsAlliee);
                                             }
                                         }
                                     }
                                     tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordAlliee1))] = tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1))]; //redonne les valeurs de départ
                                     tabVal[Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1))] = tabtmparr; //redonne les valeurs d'arrivée
+                                    echiquier.annulerCoup(Array.IndexOf(tabCoord, CoordForPos(cas.CoordAlliee1)), Array.IndexOf(tabCoord, CoordForPos(cas.CoordEnnemies1)));
                                 }
-                                echiquier.setTrait();
+                             echiquier.setTrait();
 
-                                coups = lien(min);
+                             coups = lien(min);
 
-                               CoupPossible s = CompareMinMax(coups);
+
+                             CoupPossible s = CompareMinMax(coups);
+                             echiquier.deplacement(Array.IndexOf(tabCoord, s.Position), Array.IndexOf(tabCoord, s.Arrive));
+                             Console.WriteLine("départ: " + s.Position + " arrivée: " + s.Arrive + "valeur: " + s.Valeur + "\n");
+
+
 
 
 
@@ -325,7 +354,7 @@ namespace processAI1
                                 //coord[0] = "b7";
                                 coord[1] = s.Arrive;
                                 //coord[1] = tabCoord[rnd.Next(reste.Count)];
-                                //coord[2] = "P";
+                                coord[2] = "D";
 
 
                                 /********************************************************************************************************/
@@ -459,9 +488,17 @@ namespace processAI1
         {
 
 
-           // Dictionary<string, int> MinValueDictionary = new Dictionary<string, int>(); 
-            Dictionary<string, CoupPossible> CoupPossibleDictionary = new Dictionary<string, CoupPossible>();
+           // Dictionary<string, int> MinValueDictionary = new Dictionary<string, int>();
+           Dictionary<String, CoupPossible> dico = new Dictionary<string, CoupPossible>();
+            Dictionary<String,CoupPossible> CoupPossibleDictionary = new Dictionary<String, CoupPossible>();
+            Dictionary<Tuple<String, String>, CoupPossible> poss = new Dictionary<Tuple<String, String>, CoupPossible>();
 
+            foreach (CoupPossible val in coup)
+            {
+                Tuple<String, String> tup = new Tuple<string, string>(val.Position, val.Arrive);
+                if (!poss.ContainsKey(tup))
+                poss.Add(new Tuple<String, String>(val.Position, val.Arrive), new CoupPossible("", "", 1000, ""));
+            }
             String[] tabCoord = new string[] {  "a8","b8","c8","d8","e8","f8","g8","h8",
                                        "a7","b7","c7","d7","e7","f7","g7","h7",
                                        "a6","b6","c6","d6","e6","f6","g6","h6",
@@ -475,29 +512,51 @@ namespace processAI1
             for (int i = 0; i < tabCoord.Length; i++)
             {
                 CoupPossibleDictionary.Add(tabCoord[i], new CoupPossible("", "", 1000, ""));
+
             }
 
-            foreach (CoupPossible valueCoupPossible in coup)
-            {
-                if (valueCoupPossible.Valeur < CoupPossibleDictionary[valueCoupPossible.Position].Valeur) //cherche le min de toutes les propositions 
+            foreach (CoupPossible valueCoupPossible in coup) {  
+                /* if (valueCoupPossible.Valeur < CoupPossibleDictionary[valueCoupPossible.Position].Valeur) //cherche le min de toutes les propositions 
+                 {
+                     CoupPossibleDictionary[valueCoupPossible.Position] = valueCoupPossible;
+                     //Console.WriteLine(valueCoupPossible.Position + " " + valueCoupPossible.Arrive + " " + valueCoupPossible.Valeur);
+                 }*/
+                Tuple<String, String> tup = new Tuple<string, string>(valueCoupPossible.Position,valueCoupPossible.Arrive);
+                if (valueCoupPossible.Valeur < poss[tup].Valeur)
                 {
-                    CoupPossibleDictionary[valueCoupPossible.Position] = valueCoupPossible;
+                    poss[tup] = valueCoupPossible;
+                    Console.WriteLine("dp: " + poss[tup].Position + " ar: " + poss[tup].Arrive + " val:" + poss[tup].Valeur);
                 }
             }
-
+            Console.WriteLine("\n");
             int max = -1000;
             string pos = "";
-            for (int i = 0; i < tabCoord.Length; i++) //trouve le maximum de toutes les solutions (meme départ)  
+            string arr = "";
+            /*for (int i = 0; i < tabCoord.Length; i++) //trouve le maximum de toutes les solutions (meme départ)  
             {
                 if (CoupPossibleDictionary[tabCoord[i]].Valeur != 1000 && CoupPossibleDictionary[tabCoord[i]].Valeur > max)
                 {
                     max = CoupPossibleDictionary[tabCoord[i]].Valeur;
-                    pos = tabCoord[i]; //pos de départ on veut celle d'arrivé 
+                    pos = tabCoord[i]; //pos de départ on veut celle d'arrivé
+                    //Console.Write("max: " + CoupPossibleDictionary[tabCoord[i]].Valeur + " coord: " + tabCoord[i]);
                 }
+            }*/
+
+            foreach (KeyValuePair<Tuple<String, String>, CoupPossible> po in poss)
+            {
+
+                if(po.Value.Valeur != 1000 && po.Value.Valeur > max)
+                {
+                    max = po.Value.Valeur;
+                    pos = po.Key.Item1;
+                    arr = po.Key.Item2;
+                }
+
             }
 
             //retourne une valeur parmis toute celle jouable (toujours le premier min) 
-            CoupPossible arr = CoupPossibleDictionary[pos];
+            //CoupPossible arr = CoupPossibleDictionary[pos];
+            CoupPossible ret = new CoupPossible(pos, arr, max, "");
 
 
             /***********recupere toutes les arrivés **************** si on a besoin des coups ennemis 
@@ -511,7 +570,7 @@ namespace processAI1
             } 
          
             */
-            return arr;
+            return ret;
         }
 
         private static Boolean isPion (Pieces piece)
@@ -538,7 +597,7 @@ namespace processAI1
                 int val = entree.Item3.PoidsAlliee;
                 CoupPossible coup = new CoupPossible(dp, ar,val,"");
                 coups[i] = coup;
-                Console.WriteLine(dp + " " + ar + " " + val);
+                //Console.WriteLine(dp + " " + ar + " " + val);
                 i++;
             }
             return coups;
