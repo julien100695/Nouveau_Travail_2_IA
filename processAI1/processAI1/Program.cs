@@ -114,7 +114,7 @@ namespace processAI1
                                     {
                                         int position = PosForCoord(tabCoord[i]); // On récupère la position
                                         // mesPieces.Add(tabCoord[i]); Si on veut les coordonnées de nos pièces, on peut rajouter cette ligne.
-                                        if (tabVal[i] == 1) //Pion
+                                        /*if (tabVal[i] == 1) //Pion
                                             poids = 10;
                                         else if (tabVal[i] == 21 || tabVal[i] == 22) //tour
                                             poids = 50;
@@ -125,7 +125,7 @@ namespace processAI1
                                         else if (tabVal[i] == 5) //dame
                                             poids = 90;
                                         else if (tabVal[i] == 6) //roi
-                                            poids = 900;
+                                            poids = 900;*/
                                         Pieces piece = new Pieces(tabCoord[i], tabVal[i], position, poids);
                                         piecesAlli.Add(piece); // On ajoute à la liste de pieces alliées.
                                         //Console.WriteLine(piece.Coordonnees + " " + piece.Poids);
@@ -133,7 +133,7 @@ namespace processAI1
                                     else if (tabVal[i] <= -1) // Si c'est une piece ennemie.
                                     {
                                         int position = PosForCoord(tabCoord[i]); // On récupère la position.
-                                        if (tabVal[i] == -1) //Pion
+                                        /*if (tabVal[i] == -1) //Pion
                                             poids = -10;
                                         else if (tabVal[i] == -21 || tabVal[i] == -22) //tour
                                             poids = -50;
@@ -144,7 +144,7 @@ namespace processAI1
                                         else if (tabVal[i] == -5) //dame
                                             poids = -90;
                                         else if (tabVal[i] == -6) //roi
-                                            poids = -900;
+                                            poids = -900;*/
                                         Pieces piece = new Pieces(tabCoord[i], tabVal[i], position, poids);
                                         piecesEnnemies.Add(piece); // On ajoute à la liste de pieces ennemies.
                                         //Console.WriteLine(piece.Coordonnees + " " + piece.Poids);
@@ -243,7 +243,7 @@ namespace processAI1
                                                 else if (tabVal[j] == -6) //roi
                                                     somme += -900;
                                             }
-                                            Console.WriteLine("somme = " + somme + " dp: " + piece.Coordonnees + " arr: " +tabCoord[i]);
+                                            //Console.WriteLine("somme = " + somme + " dp: " + piece.Coordonnees + " arr: " +tabCoord[i]);
                                             CasesAdversesManger deplacement = new CasesAdversesManger(piece.Position, PosForCoord(tabCoord[i]), somme);
                                             deplacement_poss.Add(deplacement);
                                             tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)] = tabVal[i]; //case de départ reprend sa valeur
@@ -313,7 +313,7 @@ namespace processAI1
                                                 Deplacement_ennemi = new CasesAdversesManger(piece.Position, PosForCoord(tabCoord[i]), somme);
                                                 min.Add(cas.CoordAlliee1, cas.CoordEnnemies1, Deplacement_ennemi);
                                                 if(somme!=0)
-                                                Console.WriteLine("somme = " + somme + " dp1: " + CoordForPos(cas.CoordAlliee1) + " arr1: " + CoordForPos(cas.CoordEnnemies1) + "\n    dp2: " + piece.Coordonnees + " arr2: " + tabCoord[i] + "\n");
+                                                //Console.WriteLine("somme = " + somme + " dp1: " + CoordForPos(cas.CoordAlliee1) + " arr1: " + CoordForPos(cas.CoordEnnemies1) + "\n    dp2: " + piece.Coordonnees + " arr2: " + tabCoord[i] + "\n");
 
                                                 tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)] = tabVal[i]; //départ = départ
                                                 tabVal[i] = valeur_ar; //arrivée = arrivée
@@ -334,7 +334,7 @@ namespace processAI1
 
                              CoupPossible s = CompareMinMax(coups);
                              echiquier.deplacement(Array.IndexOf(tabCoord, s.Position), Array.IndexOf(tabCoord, s.Arrive));
-                             Console.WriteLine("départ: " + s.Position + " arrivée: " + s.Arrive + "valeur: " + s.Valeur + "\n");
+                             //Console.WriteLine("départ: " + s.Position + " arrivée: " + s.Arrive + "valeur: " + s.Valeur + "\n");
 
 
 
@@ -492,6 +492,7 @@ namespace processAI1
            Dictionary<String, CoupPossible> dico = new Dictionary<string, CoupPossible>();
             Dictionary<String,CoupPossible> CoupPossibleDictionary = new Dictionary<String, CoupPossible>();
             Dictionary<Tuple<String, String>, CoupPossible> poss = new Dictionary<Tuple<String, String>, CoupPossible>();
+            List<CoupPossible> coups = new List<CoupPossible>();
 
             foreach (CoupPossible val in coup)
             {
@@ -525,7 +526,7 @@ namespace processAI1
                 if (valueCoupPossible.Valeur < poss[tup].Valeur)
                 {
                     poss[tup] = valueCoupPossible;
-                    Console.WriteLine("dp: " + poss[tup].Position + " ar: " + poss[tup].Arrive + " val:" + poss[tup].Valeur);
+                    //Console.WriteLine("dp: " + poss[tup].Position + " ar: " + poss[tup].Arrive + " val:" + poss[tup].Valeur);
                 }
             }
             Console.WriteLine("\n");
@@ -544,20 +545,32 @@ namespace processAI1
 
             foreach (KeyValuePair<Tuple<String, String>, CoupPossible> po in poss)
             {
-
-                if(po.Value.Valeur != 1000 && po.Value.Valeur > max)
+                Tuple<String, String> tup = new Tuple<string, string>(po.Value.Position, po.Value.Arrive);
+                //Console.WriteLine("dp: " + poss[tup].Position + " ar: " + poss[tup].Arrive + " val:" + poss[tup].Valeur);
+                if (po.Value.Valeur != 1000 && po.Value.Valeur > max)
                 {
                     max = po.Value.Valeur;
                     pos = po.Key.Item1;
                     arr = po.Key.Item2;
                 }
-
             }
+            foreach (KeyValuePair<Tuple<String, String>, CoupPossible> po in poss)
+            {
+                if (po.Value.Valeur != 1000 && po.Value.Valeur == max)
+                {
+                    CoupPossible co = new CoupPossible(po.Key.Item1, po.Key.Item2, po.Value.Valeur, "");
+                    coups.Add(co);
+                    //Console.WriteLine("in dp: " + co.Position + " arr: " + co.Arrive + " val: " + co.Valeur);
+                }
+            }
+            Random rnd = new Random();
+            int rando = new int();
+            rando = rnd.Next(coups.Count);
 
             //retourne une valeur parmis toute celle jouable (toujours le premier min) 
             //CoupPossible arr = CoupPossibleDictionary[pos];
             CoupPossible ret = new CoupPossible(pos, arr, max, "");
-
+            ret = coups[rando];
 
             /***********recupere toutes les arrivés **************** si on a besoin des coups ennemis 
             List<CoupPossible> ArrList = new List<CoupPossible>(); 
