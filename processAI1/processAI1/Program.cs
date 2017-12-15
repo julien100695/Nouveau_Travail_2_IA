@@ -67,6 +67,7 @@ namespace processAI1
                                 int dep=1000;
                                 int arr=1000;
 
+                                
                                 echiquier.setTrait();
                                 for(int i = 0; i < tabVal.Length; i++)
                                 {
@@ -80,13 +81,15 @@ namespace processAI1
                                         {
                                             arr = i;
                                             if (dep != 1000 && arr != 1000);
-                                                //Console.WriteLine("ennemi bouge de :" + tabCoord[dep] + " à " + tabCoord[arr] + "\n");
+                                                
                                         }
                                     }
                                     //Console.WriteLine("tab1: " + echiquier.getTabVal(i) + " tab2: " + tabVal[i] + " " + tabCoord[i]);
                                 }
-                                if(dep!=1000 && arr!=1000)
-                                echiquier.deplacement(dep, arr);
+                                if (dep != 1000 && arr != 1000) {
+                                    echiquier.deplacement(dep, arr);
+                                    Console.WriteLine("ennemi bouge de :" + tabCoord[dep] + " à " + tabCoord[arr] + "\n");
+                                }
                                 echiquier.setTrait();
                                 //Console.WriteLine(tabVal[0] + " " + tabVal[1] + " " + tabVal[2]);
 
@@ -215,7 +218,7 @@ namespace processAI1
                                             tabtmparr = tabVal[i]; //on stocke temporairement la valeur de la case d'arrivée
                                             tabVal[i] = tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)]; //arrivée prend valeur de piece déplacée
                                             tabVal[Array.IndexOf(tabCoord, piece.Coordonnees)] = 0; //départ prend valeur nulle
-
+                                            int o = new int();
                                             for (int j = tabVal.Length-1; j>=0; j--)
                                             {
                                                 if (tabVal[j] == 1) //Pion
@@ -229,20 +232,31 @@ namespace processAI1
                                                 else if (tabVal[j] == 5) //dame
                                                     somme += 90;
                                                 else if (tabVal[j] == 6) //roi
+
                                                     somme += 900;
+
+                                                //Console.WriteLine("roi");
                                                 else if (tabVal[j] == -1) //Pion
                                                     somme += -10;
                                                 else if (tabVal[j] == -21 || tabVal[j] == -22) //tour
-                                                     somme += -50;
+                                                    somme += -50;
                                                 else if (tabVal[j] == -4) //fou
                                                     somme += -33;
                                                 else if (tabVal[j] == -31 || tabVal[j] == -32) //cavalier
                                                     somme += -32;
                                                 else if (tabVal[j] == -5) //dame
                                                     somme += -90;
-                                                else if (tabVal[j] == -6) //roi
+                                                else if (echiquier.miseEnEchec()) //roi
+                                                {
+                                                    somme += 900;
+                                                    o = j;
+                                                }
+                                                echiquier.setTrait();
+                                                if (echiquier.miseEnEchec())
                                                     somme += -900;
+                                                echiquier.setTrait();
                                             }
+                                            //if(i==o)
                                             //Console.WriteLine("somme = " + somme + " dp: " + piece.Coordonnees + " arr: " +tabCoord[i]);
                                             CasesAdversesManger deplacement = new CasesAdversesManger(piece.Position, PosForCoord(tabCoord[i]), somme);
                                             deplacement_poss.Add(deplacement);
@@ -334,16 +348,7 @@ namespace processAI1
 
                              CoupPossible s = CompareMinMax(coups);
                              echiquier.deplacement(Array.IndexOf(tabCoord, s.Position), Array.IndexOf(tabCoord, s.Arrive));
-                             //Console.WriteLine("départ: " + s.Position + " arrivée: " + s.Arrive + "valeur: " + s.Valeur + "\n");
-
-
-
-
-
-
-
-
-
+                             Console.WriteLine("départ: " + s.Position + " arrivée: " + s.Arrive + "valeur: " + s.Valeur + "\n");
 
 
 
